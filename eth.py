@@ -36,7 +36,6 @@ if __name__ == "__main__":
     new_raw = signed.rawTransaction.hex()
     new_hash = signed.hash.hex()
     transaction['Signed Transaction'] = new_raw
-    transaction['Transaction Hash'] = new_hash
 
     # --- Вывод подписанной JSON транзакции в консоль
     signed_json = json.dumps(transaction)
