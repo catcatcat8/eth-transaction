@@ -27,7 +27,7 @@ if __name__ == "__main__":
         'gas': gas_limit, 
         'gasPrice': int(gas_price*(10**9)),
         'nonce': 0,
-        'chainId': 1
+        'chainId': 1  # rinkeby
     }
 
     signed = w3.eth.account.sign_transaction(transaction, pr_key)  # подписывание транзакции
@@ -35,7 +35,11 @@ if __name__ == "__main__":
     # --- Перевод из HexBytes в string для дальнейшей записи в JSON
     new_raw = signed.rawTransaction.hex()
     new_hash = signed.hash.hex()
-    transaction['Signed Transaction'] = new_raw
+    transaction['rawTransaction'] = new_raw
+    transaction['hash'] = new_hash
+    transaction['r'] = signed.r
+    transaction['s'] = signed.s
+    transaction['v'] = signed.v
 
     # --- Вывод подписанной JSON транзакции в консоль
     signed_json = json.dumps(transaction)
