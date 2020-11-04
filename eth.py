@@ -14,25 +14,26 @@ if __name__ == "__main__":
         eth_amount = 0.1
         ds_address = "0xB64fE1236f7D72c15Bffc6C529f750A8ACa4f8A2"
     else:
-        eth_amount = float(sys.argv[1][2:])
-        ds_address = sys.argv[2][2:]
+        eth_amount = float(sys.argv[1][1:])
+        ds_address = sys.argv[2][1:]
 
-    gas_limit = 21000
-    gas_price = 24
+    gas_limit = 40000
+    gas_price = 15
 
     transaction = {
-        'to': ds_address,
         'from': my_address,
-        'value': int(eth_amount*(10**18)),  # ETH 
-        'gas': gas_limit, 
+        'nonce': 1,
         'gasPrice': int(gas_price*(10**9)),
-        'nonce': 0,
-        'chainId': 1  # rinkeby
+        'gas': gas_limit,
+        'to': ds_address,
+        'value': int(eth_amount*(10**18)),  # ETH  
+        'data': my_address,  # комментарий к сдаче
+        'chainId': 4,  # rinkeby
     }
 
     signed = w3.eth.account.sign_transaction(transaction, pr_key)  # подписывание транзакции
 
-    # --- Перевод из HexBytes в string для дальнейшей записи в JSON
+    # --- Добавление подписи к транзакции
     new_raw = signed.rawTransaction.hex()
     new_hash = signed.hash.hex()
     transaction['rawTransaction'] = new_raw
@@ -41,10 +42,10 @@ if __name__ == "__main__":
     transaction['s'] = signed.s
     transaction['v'] = signed.v
 
-    # --- Вывод подписанной JSON транзакции в консоль
-    signed_json = json.dumps(transaction)
-    print(signed_json)
+    # --- Создание JSON файла подписанной транзакции
+    with open ('transaction.json', 'w') as raw_transaction:
+        json.dump(transaction, raw_transaction, indent=2)
 
-    # --- Создание JSON файла транзакции
-    with open ('transaction.json', 'w') as transaction_json_file:
-        json.dump(transaction, transaction_json_file)
+    # --- Вывод подписанной JSON транзакции в консоль
+    json_transaction = json.dumps(transaction, indent=2)
+    print(json_transaction)
