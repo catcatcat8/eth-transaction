@@ -14,8 +14,8 @@ if __name__ == "__main__":
         eth_amount = 0.1
         ds_address = "0xB64fE1236f7D72c15Bffc6C529f750A8ACa4f8A2"
     else:
-        eth_amount = float(sys.argv[1])
-        ds_address = sys.argv[2]
+        eth_amount = float(sys.argv[1][2:])
+        ds_address = sys.argv[2][2:]
 
     gas_limit = 21000
     gas_price = 24
