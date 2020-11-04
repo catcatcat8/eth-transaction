@@ -23,7 +23,7 @@ if __name__ == "__main__":
     transaction = {
         'to': ds_address,
         'from': my_address,
-        'value': int(eth_amount*(10**18)),  # 0.1 ETH 
+        'value': int(eth_amount*(10**18)),  # ETH 
         'gas': gas_limit, 
         'gasPrice': int(gas_price*(10**9)),
         'nonce': 0,
@@ -35,22 +35,13 @@ if __name__ == "__main__":
     # --- Перевод из HexBytes в string для дальнейшей записи в JSON
     new_raw = signed.rawTransaction.hex()
     new_hash = signed.hash.hex()
-    signed_str = {
-        'rawTransaction': new_raw,
-        'hash': new_hash,
-        'r': signed.r,
-        's': signed.s,
-        'v': signed.v
-    }
+    transaction['Signed Transaction'] = new_raw
+    transaction['Transaction Hash'] = new_hash
 
     # --- Вывод подписанной JSON транзакции в консоль
-    signed_json = json.dumps(signed_str)
+    signed_json = json.dumps(transaction)
     print(signed_json)
 
     # --- Создание JSON файла транзакции
     with open ('transaction.json', 'w') as transaction_json_file:
         json.dump(transaction, transaction_json_file)
-
-    # --- Создание JSON файла подписанной транзакции
-    with open ('signed_transaction.json', 'w') as signed_json_file:
-        json.dump(signed_str, signed_json_file)
